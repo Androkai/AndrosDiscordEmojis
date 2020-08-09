@@ -15,3 +15,7 @@ Since snapshot [20w17a](https://www.minecraft.net/de-de/article/minecraft-snapsh
 
 * The emoji images in this project are used from [Twemoji](https://twemoji.twitter.com/) which are licensed by [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 * This project is also licensed by [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Feel free to use and adapt in your own resource pack but give appropriate credit and provide a link to the license.
+
+## Screenshots
+
+![2020-08-09_02 20 22](https://user-images.githubusercontent.com/3952718/89722851-10c55380-d9ef-11ea-969d-16ae6cf84f0e.png)
