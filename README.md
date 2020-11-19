@@ -1,6 +1,6 @@
 # Andro's Discord Emojis
 
-Since snapshot [20w17a](https://www.minecraft.net/de-de/article/minecraft-snapshot-20w17a) (pre 1.16) Minecraft is supporting full Unicode range allowing the use of emojis in all places like chat, books and signs. Sadly Minecraft's own font didn't got an update so I did it myself with this [resource pack](https://minecraft.gamepedia.com/Resource_Pack#Fonts).
+Since snapshot [20w17a](https://www.minecraft.net/de-de/article/minecraft-snapshot-20w17a) (pre 1.16) Minecraft is supporting full Unicode range allowing the use of emojis in all places like chat, books and signs. Sadly Minecraft's own font didn't get an update so I did it myself with this [resource pack](https://minecraft.gamepedia.com/Resource_Pack#Fonts).
 
 ## Usage
 
