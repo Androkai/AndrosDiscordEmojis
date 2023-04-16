@@ -33,12 +33,11 @@ function copyFolderSync(source, target) {
 }
 dir('./run/')
 dir('./run/build/')
-dir('./run/svg/')
 copyFolderSync('./resource/', './run/resource/')
 
 // Clone GitHub Repo
 // /assets/svg/
-// goGitIt('https://github.com/twitter/twemoji/tree/master/assets/svg', './run/')
+goGitIt('https://github.com/twitter/twemoji/tree/master/assets/svg', './run/')
 
 var unicodes = convert.mc("./run/svg/", "./run/resource/assets/minecraft/textures/font/")
 console.log(unicodes)
