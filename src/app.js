@@ -33,13 +33,19 @@ function copyFolderSync(source, target) {
 }
 dir('./run/')
 dir('./run/build/')
+dir('./run/svg/')
 copyFolderSync('./resource/', './run/resource/')
 
 // Clone GitHub Repo
 // /assets/svg/
 goGitIt('https://github.com/twitter/twemoji/tree/master/assets/svg', './run/')
+console.log("Clone Success")
+
+shell.cd("../")
 
 var unicodes = convert.mc("./run/svg/", "./run/resource/assets/minecraft/textures/font/")
+console.log("Convert Success")
+
 console.log(unicodes)
 fs.writeFile('./run/resource/assets/minecraft/font/default.json', json.generateJson(unicodes), (err) => {
     if (err) throw err;
@@ -51,7 +57,6 @@ zip.addLocalFolder("./run/resource");
 
 const buffer = zip.toBuffer();
 fs.writeFileSync("./run/build/AndrosDiscordEmojis.zip", buffer);
-
-    console.log('Done');
+console.log('Done');
 });
 

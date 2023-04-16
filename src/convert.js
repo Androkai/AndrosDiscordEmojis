@@ -19,7 +19,6 @@ function mc(from, to, ulist = []) {
             .png()
             .toFile(to + newName)
             .then(function(info) {
-            ulist.push(ucode)
         }).catch (function(err) {
             console.log(`${ucode} 转换失败`)
             throw err
