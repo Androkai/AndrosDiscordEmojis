@@ -6,7 +6,8 @@ const shell = require('shelljs')
 const goGitIt = require('go-git-it')
 const path = require('path')
 
-const workFolder = './run/'
+const workDir = path.resolve('./run/')
+const buildDir = workDir + 'build/'
 
 function dir(target) {
     if (!fs.existsSync(target)) {
@@ -33,31 +34,30 @@ function copyFolderSync(source, target) {
     }
   });
 }
-dir(workFolder)
-dir(workFolder + 'build/')
-dir(workFolder + 'svg/')
-copyFolderSync('./resource/', workFolder + 'resource/')
+dir(workDir)
+dir(buildDir)
+dir(workDir + 'svg/')
+copyFolderSync('./resource/', workDir + 'resource/')
 
 // Clone GitHub Repo
 // /assets/svg/
-goGitIt('https://github.com/twitter/twemoji/tree/master/assets/svg', workFolder)
-shell.cd('../')
+goGitIt('https://github.com/twitter/twemoji/tree/master/assets/svg', workDir)
 console.log("Clone Success")
 
-var unicodes = convert.mc(workFolder + 'svg/', './resource/assets/minecraft/textures/font/')
+var unicodes = convert.mc(workDir + 'svg/', workDir + 'resource/assets/minecraft/textures/font/')
 console.log("Convert Success")
 
 console.log(unicodes)
-fs.writeFile(workFolder + 'resource/assets/minecraft/font/default.json', json.generateJson(unicodes), (err) => {
+fs.writeFile(workDir + 'resource/assets/minecraft/font/default.json', json.generateJson(unicodes), (err) => {
     if (err) throw err;
     console.log('Font File Success');
     
 // package
 const zip = new AdmZip();
-zip.addLocalFolder(workFolder + 'resource');
+zip.addLocalFolder(workDir + 'resource');
 
 const buffer = zip.toBuffer();
-fs.writeFileSync(workFolder + 'build/AndrosDiscordEmojis.zip', buffer);
+fs.writeFileSync(buildDir + 'AndrosDiscordEmojis.zip', buffer);
 console.log('Done');
 });
 
