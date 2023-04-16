@@ -16,23 +16,25 @@ function dir(target) {
         fs.mkdirSync(target);
     }
 }
-async function copyFolderAsync(source, target) {
-  const files = await fs.promises.readdir(source);
+function copyFolderSync(source, target) {
+  // Create target folder if it doesn't exist
+  dir(target);
 
-  for (const file of files) {
+  // Get all files and subfolders in source folder
+  fs.readdirSync(source).forEach(function (file) {
     const sourcePath = path.join(source, file);
     const targetPath = path.join(target, file);
 
-    const stats = await fs.promises.stat(sourcePath);
-
-    if (stats.isFile()) {
-      await fs.promises.copyFile(sourcePath, targetPath);
+    // If current item is a file, copy it
+    if (fs.statSync(sourcePath).isFile()) {
+      fs.copyFileSync(sourcePath, targetPath);
     }
 
-    if (stats.isDirectory()) {
-      await copyFolderAsync(sourcePath, targetPath);
+    // If current item is a folder, recursively call this function
+    if (fs.statSync(sourcePath).isDirectory()) {
+      copyFolderSync(sourcePath, targetPath);
     }
-  }
+  });
 }
 
 // Do not modify
@@ -42,7 +44,7 @@ const resourceDir = path.join(workDir, 'resource/')
 dir(workDir)
 dir(buildDir)
 dir(svgDir)
-copyFolderAsync('./resource/', resourceDir)
+copyFolderSync('./resource/', resourceDir)
 
 // Clone GitHub Repo
 // assets/svg/
