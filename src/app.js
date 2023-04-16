@@ -16,25 +16,23 @@ function dir(target) {
         fs.mkdirSync(target);
     }
 }
-async function copyFolderSync(source, target) {
-  // Create target folder if it doesn't exist
-  dir(target);
+async function copyFolderAsync(source, target) {
+  const files = await fs.promises.readdir(source);
 
-  // Get all files and subfolders in source folder
-  fs.readdirSync(source).forEach(function (file) {
+  for (const file of files) {
     const sourcePath = path.join(source, file);
     const targetPath = path.join(target, file);
 
-    // If current item is a file, copy it
-    if (fs.statSync(sourcePath).isFile()) {
-      fs.copyFileSync(sourcePath, targetPath);
+    const stats = await fs.promises.stat(sourcePath);
+
+    if (stats.isFile()) {
+      await fs.promises.copyFile(sourcePath, targetPath);
     }
 
-    // If current item is a folder, recursively call this function
-    if (fs.statSync(sourcePath).isDirectory()) {
-      copyFolderSync(sourcePath, targetPath);
+    if (stats.isDirectory()) {
+      await copyFolderAsync(sourcePath, targetPath);
     }
-  });
+  }
 }
 
 // Do not modify
