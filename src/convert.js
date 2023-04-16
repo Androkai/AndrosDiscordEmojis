@@ -17,14 +17,12 @@ function mc(from, to, ulist = []) {
         const oldFile = path.join(from, file)
         const newFile = path.join(to, ucode + '.png')
         
-        const png = sharp(oldFile)
+        sharp(oldFile)
             .resize(64, 64)
             .png()
-            .toBuffer();
-        fs.writeFile(newFile, png, (err) => {
-            if (err) throw err;
-        });
-        
+            .toFile(newFile, (err, info) => {
+                if (err) throw console.log(`${ucode} Convert Fail`);
+            });
         ulist.push(ucode)
     });
     return ulist;
