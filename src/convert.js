@@ -20,7 +20,7 @@ function mc(from, to, ulist = []) {
             .toFile(to + newName)
             .then(function(info) {
         }).catch (function(err) {
-            console.log(`${ucode} 转换失败`)
+            console.log(`${ucode} Convert Fail`)
             throw err
         })
         ulist.push(ucode)
