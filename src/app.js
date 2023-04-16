@@ -47,24 +47,26 @@ dir(svgDir)
 copyFolderSync('./resource/', resourceDir)
 
 // Clone GitHub Repo
-// /assets/svg/
+// assets/svg/
 goGitIt('https://github.com/twitter/twemoji/tree/master/assets/svg', workDir)
 console.log("Clone Success")
 
+// Convert
 var unicodes = convert.mc(svgDir, path.join(resourceDir, 'assets/minecraft/textures/font/'))
 console.log("Convert Success")
 
+// Generate Json
 console.log(unicodes)
 fs.writeFile(path.join(resourceDir, 'assets/minecraft/font/default.json'), json.generateJson(unicodes), (err) => {
     if (err) throw err;
     console.log('Font File Success');
     
-// package
+// Zip
 const zip = new AdmZip();
 zip.addLocalFolder(resourceDir);
-
 const buffer = zip.toBuffer();
-fs.writeFileSync(path.join(buildDir, 'AndrosDiscordEmojis.zip'), buffer);
+fs.writeFileSync(path.join(buildDir, buildName), buffer);
+
 console.log('Done');
 });
 

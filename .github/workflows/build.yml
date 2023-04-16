@@ -1,12 +1,9 @@
 name: Build
 on: 
   workflow_dispatch:
-permissions:
-  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
