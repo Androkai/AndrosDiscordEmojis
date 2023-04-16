@@ -52,7 +52,7 @@ goGitIt('https://github.com/twitter/twemoji/tree/master/assets/svg', workDir)
 console.log("Clone Success")
 
 // Convert
-var unicodes = convert.mc(svgDir, path.join(resourceDir, 'assets/minecraft/textures/font/'))
+const unicodes = convert.mc(svgDir, path.join(resourceDir, 'assets/minecraft/textures/font/'))
 console.log("Convert Success")
 
 // Generate Json

@@ -12,17 +12,19 @@ function mc(from, to, ulist = []) {
         && path.extname(file).toLowerCase() === '.svg';
     });
    svgFiles.forEach(file => {
-        let ucode = path.basename(file, ".svg")
-        let newName = ucode + ".png"
-        sharp(from + file)
+        const ucode = path.basename(file, '.svg')
+        
+        const oldFile = path.join(from, file)
+        const newFile = path.join(to, ucode + '.png')
+        
+        const png = sharp(oldFile)
             .resize(64, 64)
             .png()
-            .toFile(to + newName)
-            .then(function(info) {
-        }).catch (function(err) {
-            console.log(`${ucode} Convert Fail`)
-            throw err
-        })
+            .toBuffer();
+        fs.writeFile(newFile, png, (err) => {
+            if (err) throw err;
+        });
+        
         ulist.push(ucode)
     });
     return ulist;
