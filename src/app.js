@@ -42,7 +42,7 @@ const resourceDir = path.join(workDir, 'resource/')
 dir(workDir)
 dir(buildDir)
 dir(svgDir)
-copyFolderSync('./resource/', resourceDir)
+copyFolderAsync('./resource/', resourceDir)
 
 // Clone GitHub Repo
 // assets/svg/
