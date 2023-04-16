@@ -41,7 +41,7 @@ jobs:
         run: pnpm install
       
       - name: Build Resource
-        run: node src/app
+        run: pnpm run app
         
       - name: Release
         uses: softprops/action-gh-release@v1

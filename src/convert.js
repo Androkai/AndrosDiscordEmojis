@@ -21,7 +21,10 @@ function mc(from, to, ulist = []) {
             .resize(64, 64)
             .png()
             .toFile(newFile, (err, info) => {
-                if (err) throw console.log(`${newFile} Convert Fail`);
+                if (err) {
+                    console.log(`${newFile} Convert Fail`)
+                    throw err
+                }
             });
         ulist.push(ucode)
     });
