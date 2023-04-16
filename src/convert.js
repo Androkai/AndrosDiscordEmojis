@@ -6,9 +6,6 @@ module.exports = {
 }
 
 function mc(from, to, ulist = []) {
-    if (!fs.existsSync(to)) {
-        fs.mkdirSync(to);
-    }
     const files = fs.readdirSync(from);
     const svgFiles = files.filter((file) => {
         return path.basename(file).indexOf('-') == -1 

@@ -4,6 +4,9 @@ dependencies:
   adm-zip:
     specifier: ^0.5.10
     version: 0.5.10
+  go-git-it:
+    specifier: ^1.0.0
+    version: 1.0.0
   sharp:
     specifier: ^0.32.0
     version: 0.32.0
@@ -135,6 +138,14 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
+    dev: false
+
+  /go-git-it@1.0.0:
+    resolution: {integrity: sha512-zGfS5BAWo1ei3d4yLqudDs7c/6XEu+qeNjvvgxXsVX+8Qlc8jqgjO01L6NheG/TotMkSc6W7kJ8FOVHsbpCUug==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      shelljs: 0.8.5
     dev: false
 
   /has@1.0.3:

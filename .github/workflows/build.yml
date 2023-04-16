@@ -47,4 +47,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: AndrosDiscordEmojis.zip
+          files: ./run/build/AndrosDiscordEmojis.zip
