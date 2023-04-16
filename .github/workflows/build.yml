@@ -44,6 +44,8 @@ jobs:
         run: pnpm run app
         
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          files: ./run/build/AndrosDiscordEmojis.zip
+          artifacts: "run/build/"
+          bodyFile: ".github/release.md"
+          token: ${{ secrets.YOUR_GITHUB_TOKEN }}
