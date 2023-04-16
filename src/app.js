@@ -16,7 +16,7 @@ function dir(target) {
         fs.mkdirSync(target);
     }
 }
-function copyFolderSync(source, target) {
+async function copyFolderSync(source, target) {
   // Create target folder if it doesn't exist
   dir(target);
 
