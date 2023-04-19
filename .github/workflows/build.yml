@@ -48,4 +48,4 @@ jobs:
         with:
           artifacts: "run/build/"
           bodyFile: ".github/release.md"
-          token: ${{ secrets.YOUR_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
