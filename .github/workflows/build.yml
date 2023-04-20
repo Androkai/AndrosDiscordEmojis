@@ -1,8 +1,6 @@
 name: Build
 on:
   push:
-    tags:
-    - '*'
 permissions:
   contents: write
 jobs:
@@ -43,10 +41,20 @@ jobs:
       
       - name: Build Resource
         run: pnpm run app
-        
-      - name: Release
-        uses: ncipollo/release-action@v1
+          
+      - name: Generate release tag
+        id: tag
+        if: true && !failure() && !cancelled()
+        run: |
+          echo "::set-output name=release_tag::Build-$(date +"%Y.%m.%d-%H.%M")"
+          echo "::set-output name=status::success"
+          
+      - name: Upload firmware to release
+        uses: softprops/action-gh-release@v1
+        if: steps.tag.outputs.status == 'success' && !cancelled() && !failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          artifacts: "run/build/"
-          bodyFile: ".github/release.md"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: .github/release.md
+          files: run/build/*
