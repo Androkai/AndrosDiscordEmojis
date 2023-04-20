@@ -1,50 +1,67 @@
 const fs = require('fs');
-const PNG = require('pngjs').PNG;
+const path = require('path');
+const sharp = require('sharp');
 module.exports = {
     allToOne
 }
 
-function allToOne(where, output) {
-// Get all PNG files
-const pngFiles = fs.readdirSync(where).filter(file => file.endsWith('.png'));
+async function allToOne(inputDir, outputFilePath) {
+  try {
+    // Read all PNG images
+    const images = fs
+      .readdirSync(inputDir)
+      .filter(file => path.extname(file) === '.png')
+      .map(file => path.join(inputDir, file))
+      .filter(image => {
+        try {
+          sharp(image).metadata();
+          return true;
+        } catch (err) {
+          console.log(`Error reading file ${image}: ${err.message}`);
+          return false;
+        }
+      });
 
-// Calculate the width and height of each PNG file
-const pngDimensions = pngFiles.map(file => {
-  const png = PNG.sync.read(fs.readFileSync(file));
-  return {
-    width: png.width,
-    height: png.height
+    // Calculate the aspect ratio of each image
+    const imageRatios = await Promise.all(images.map(async image => {
+      const metadata = await sharp(image).metadata();
+      return metadata.width / metadata.height;
+    }));
+
+    // Calculate the width and height of the final image
+    const imageCount = images.length;
+    const totalRatio = imageRatios.reduce((sum, ratio) => sum + ratio, 0);
+    const targetRatio = 16 / 9;
+    const targetHeight = 1080;
+    const targetWidth = targetRatio * targetHeight;
+    const actualRatio = targetWidth / (targetHeight * imageCount / totalRatio);
+    const width = actualRatio <= targetRatio ? targetWidth : targetHeight * imageCount / totalRatio;
+    const height = actualRatio <= targetRatio ? width / targetRatio : targetHeight;
+
+    // Create the final image
+    const outputImage = sharp({
+      create: {
+        width: Math.round(width),
+        height: Math.round(height),
+        channels: 4,
+        background: null
+      }
+    });
+
+    // Resize and composite all images into the final image
+    await Promise.all(images.map(async (imagePath, index) => {
+      const buffer = await sharp(imagePath).resize(Math.round(width / imageCount), Math.round(height)).toBuffer();
+      const x = Math.round(index * width / imageCount);
+      const y = 0;
+      return outputImage.composite([{ input: buffer, left: x, top: y }]);
+    }));
+
+    // Save the final image
+    await outputImage.toFile(outputFilePath);
+
+    // Return the output file path
+    return outputFilePath;
+  } catch (err) {
+    throw err;
   }
-});
-
-// Calculate the width and height of the final photo
-const totalWidth = Math.max(...pngDimensions.map(dim => dim.width));
-const totalHeight = Math.ceil(pngDimensions.reduce((sum, dim) => sum + dim.height, 0) / pngFiles.length * 16 / 9);
-
-// Create a new PNG file and set the width and height
-const result = new PNG({ width: totalWidth, height: totalHeight });
-
-// Copy all PNG files into the new PNG file
-let currentY = 0;
-pngFiles.forEach((file, index) => {
-  const png = PNG.sync.read(fs.readFileSync(file));
-  const startY = currentY;
-  png.data.copy(result.data, totalWidth * currentY * 4, 0, png.width * png.height * 4);
-  currentY += png.height;
-  // Add a horizontal line in the new PNG file
-  if (index !== pngFiles.length - 1) {
-    for (let x = 0; x < totalWidth; x++) {
-      const y = Math.floor(currentY * 16 / 9);
-      const i = (y * totalWidth + x) * 4;
-      result.data[i] = 255;
-      result.data[i + 1] = 255;
-      result.data[i + 2] = 255;
-      result.data[i + 3] = 255;
-    }
-    currentY = Math.floor(currentY * 16 / 9);
-  }
-});
-
-// Save the result as a new PNG file
-fs.writeFileSync(output, PNG.sync.write(result));
 }

@@ -74,7 +74,13 @@ const buffer = zip.toBuffer();
 fs.writeFileSync(path.join(buildDir, buildName), buffer);
 
 // Others
-readme.allToOne(pngDir, path.join(basicDir, 'readme/emojis.png'));
+readme.allToOne(pngDir, path.join(basicDir, 'readme/emojis.png'))
+  .then(outputFilePath => {
+    console.log(`Output file saved to ${outputFilePath}`);
+  })
+  .catch(err => {
+    console.error(`Error creating collage: ${err.message}`);
+  });
 
 console.log('Done');
 });
