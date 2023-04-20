@@ -23,7 +23,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: "8.2.0"
+          version: "8.3.1"
           run_install: false
 
       - name: Get pnpm store directory
@@ -74,7 +74,7 @@ jobs:
           # Write here some modifications to the release.md file.
           echo "::set-output name=status::success"
           
-      - name: Upload firmware to release
+      - name: Upload to release
         uses: softprops/action-gh-release@v1
         if: steps.tag.outputs.status == 'success' && !cancelled() && !failure()
         env:
