@@ -45,6 +45,8 @@ dir(workDir)
 dir(buildDir)
 dir(svgDir)
 copyFolderSync('./resource/', resourceDir)
+dir(path.join(resourceDir, 'assets/minecraft/font'))
+dir(path.join(resourceDir, 'assets/minecraft/textures/font'))
 
 // Clone GitHub Repo
 // assets/svg/
