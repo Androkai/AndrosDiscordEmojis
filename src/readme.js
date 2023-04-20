@@ -44,7 +44,7 @@ async function allToOne(inputDir, outputFilePath) {
         width: Math.round(width),
         height: Math.round(height),
         channels: 4,
-        background: null
+        background: { r: 0, g: 0, b: 0, alpha: 1 }
       }
     });
 
