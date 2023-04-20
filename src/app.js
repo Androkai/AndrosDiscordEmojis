@@ -13,7 +13,7 @@ const buildName = 'AndrosDiscordEmojis.zip'
 
 function dir(target) {
     if (!fs.existsSync(target)) {
-        fs.mkdirSync(target);
+        fs.mkdirSync(target, { recursive: true });
     }
 }
 function copyFolderSync(source, target) {
