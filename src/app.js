@@ -1,5 +1,7 @@
 const convert = require('./convert')
 const json = require('./json')
+const readme = require('./readme')
+
 const AdmZip = require('adm-zip');
 const fs = require('fs')
 const shell = require('shelljs')
@@ -7,6 +9,7 @@ const goGitIt = require('go-git-it')
 const path = require('path')
 
 // Custom variable
+const basicDir = process.cwd()
 const workDir = path.resolve('./run/')
 const buildDir = path.join(workDir, 'build/')
 const buildName = 'AndrosDiscordEmojis.zip'
@@ -40,13 +43,14 @@ function copyFolderSync(source, target) {
 // Do not modify
 const svgDir = path.join(workDir, 'svg/')
 const resourceDir = path.join(workDir, 'resource/')
+const pngDir = path.join(resourceDir, 'assets/minecraft/textures/font')
 
 dir(workDir)
 dir(buildDir)
 dir(svgDir)
 copyFolderSync('./resource/', resourceDir)
 dir(path.join(resourceDir, 'assets/minecraft/font'))
-dir(path.join(resourceDir, 'assets/minecraft/textures/font'))
+dir(pngDir)
 
 // Clone GitHub Repo
 // assets/svg/
@@ -54,7 +58,7 @@ goGitIt('https://github.com/twitter/twemoji/tree/master/assets/svg', workDir)
 console.log("Clone Success")
 
 // Convert
-const unicodes = convert.mc(svgDir, path.join(resourceDir, 'assets/minecraft/textures/font/'))
+const unicodes = convert.mc(svgDir, pngDir)
 console.log("Convert Success")
 
 // Generate Json
@@ -68,6 +72,9 @@ const zip = new AdmZip();
 zip.addLocalFolder(resourceDir);
 const buffer = zip.toBuffer();
 fs.writeFileSync(path.join(buildDir, buildName), buffer);
+
+// Others
+readme.allToOne(pngDir, path.join(basicDir, 'readme/emojis.png'));
 
 console.log('Done');
 });

@@ -43,14 +43,35 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       
-      - name: Build Resource
+      - name: Run App
         run: pnpm run app
+        
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes detected"
+            echo "::set-output name=push_required::false"
+          else
+            echo "Changes detected"
+            echo "::set-output name=push_required::true"
+          fi
+
+      - name: Push changes
+        if: steps.check_changes.outputs.push_required == 'true'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Auto Update"
+          git push
           
       - name: Generate release tag
         id: tag
         if: true && !failure() && !cancelled()
         run: |
           echo "::set-output name=release_tag::Build-$(date +"%Y.%m.%d-%H.%M")"
+          # Write here some modifications to the release.md file.
           echo "::set-output name=status::success"
           
       - name: Upload firmware to release
