@@ -1,5 +1,9 @@
 name: Build
 on:
+  schedule:
+   # At 00:00 on day-of-month 1.
+   - cron: '0 0 1 * *'
+  workflow_dispatch:
   push:
 permissions:
   contents: write
