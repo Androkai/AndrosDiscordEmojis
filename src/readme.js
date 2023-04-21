@@ -35,11 +35,7 @@ async function combinePngs(inputDir, outputPath) {
   
   // Loop through the PNG files and composite them into the combined image
   pngFiles.forEach((file, index) => {
-    sharpInstance.overlayWith(`${inputDir}/${file}`, {
-      gravity: 'northwest',
-      top: Math.floor(index / ratio) * Math.floor(height / ratio),
-      left: (index % ratio) * Math.floor(width / ratio)
-    });
+    sharpInstance.composite([{ input: `${inputDir}/${file}`, gravity: 'northwest', top: Math.floor(index / ratio) * Math.floor(height / ratio), left: (index % ratio) * Math.floor(width / ratio) }]);
   });
   
   // Save the combined image and return the file path
