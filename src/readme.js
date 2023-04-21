@@ -35,8 +35,14 @@ async function combinePngs(inputDir, outputPath) {
   
   // Loop through the PNG files and composite them into the combined image
   pngFiles.forEach((file, index) => {
-    sharpInstance.composite([{ input: `${inputDir}/${file}`, gravity: 'northwest', top: Math.floor(index / ratio) * Math.floor(height / ratio), left: Math.floor((index % ratio) * Math.floor(width / ratio)) }]);
+    sharpInstance.composite([{ input: `${inputDir}/${file}`, gravity: 'northwest', top: Math.floor(index / ratio) * Math.floor(height / ratio), left: Math.floor((index % ratio) * Math.floor(width / ratio)), scale: 2 }]);
   });
+  
+  // Create the output directory if it does not exist
+  const outputDir = path.dirname(outputPath);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
   
   // Save the combined image and return the file path
   const { filename } = await sharpInstance.toFile(outputPath);
