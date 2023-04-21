@@ -74,13 +74,9 @@ const buffer = zip.toBuffer();
 fs.writeFileSync(path.join(buildDir, buildName), buffer);
 
 // Others
-readme.allToOne(pngDir, path.join(basicDir, 'readme/emojis.png'))
-  .then(outputFilePath => {
-    console.log(`Output file saved to ${outputFilePath}`);
-  })
-  .catch(err => {
-    console.error(`Error creating collage: ${err.message}`);
-  });
+readme.combinePngs(pngDir, path.join(basicDir, 'readme/emojis.png'))
+  .then(filePath => console.log(`Combined PNG image saved to ${filePath}`))
+  .catch(err => console.error(err));
 
 console.log('Done');
 });
