@@ -24,5 +24,5 @@ I recommend using an online tool like [Twitter Symbols](https://www.piliapp.com/
 
 ## Screenshots
 
-![emojis on a sign](https://user-images.githubusercontent.com/3952718/89722851-10c55380-d9ef-11ea-969d-16ae6cf84f0e.png)
-![Minecraft chat box full of emojis](https://user-images.githubusercontent.com/3952718/89732919-2ddf3e00-da52-11ea-9ea5-59df51a6c25e.png)
+![emojis on a sign](readme/ingame.png)
+![Minecraft chat box full of emojis](readme/emojis.png)

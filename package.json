@@ -1,0 +1,18 @@
+{
+  "name": "AndrosDiscordEmojis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "app": "chmod +x ./src/app.js && node src/app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "CC-BY-4.0",
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "go-git-it": "^1.0.0",
+    "sharp": "^0.32.0",
+    "shelljs": "^0.8.5"
+  }
+}

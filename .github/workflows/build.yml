@@ -1,0 +1,85 @@
+name: Build
+on:
+  schedule:
+   # At 00:00 on day-of-month 1.
+   - cron: '0 0 1 * *'
+  workflow_dispatch:
+  push:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: "8.3.1"
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Run App
+        run: pnpm run app
+        
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes detected"
+            echo "::set-output name=push_required::false"
+          else
+            echo "Changes detected"
+            echo "::set-output name=push_required::true"
+          fi
+
+      - name: Push changes
+        if: steps.check_changes.outputs.push_required == 'true'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Auto Update"
+          git push
+          
+      - name: Generate release tag
+        id: tag
+        if: true && !failure() && !cancelled()
+        run: |
+          echo "::set-output name=release_tag::Build-$(date +"%Y.%m.%d-%H.%M")"
+          # Write here some modifications to the release.md file.
+          echo "::set-output name=status::success"
+          
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
+        if: steps.tag.outputs.status == 'success' && !cancelled() && !failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: .github/release.md
+          files: run/build/*
