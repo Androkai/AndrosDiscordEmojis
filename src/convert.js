@@ -8,15 +8,15 @@ module.exports = {
 function mc(from, to, ulist = []) {
     const files = fs.readdirSync(from);
     const svgFiles = files.filter((file) => {
-        return path.basename(file).indexOf('-') == -1 
-        && path.extname(file).toLowerCase() === '.svg';
+        return path.basename(file).indexOf('-') == -1
+            && path.extname(file).toLowerCase() === '.svg';
     });
-   svgFiles.forEach(file => {
+    svgFiles.forEach(file => {
         const ucode = path.basename(file, '.svg')
-        
+
         const oldFile = path.join(from, file)
         const newFile = path.join(to, ucode + '.png')
-        
+
         sharp(oldFile)
             .resize(64, 64)
             .png()
